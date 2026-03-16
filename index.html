@@ -270,6 +270,11 @@
     max-width: 100%;
   }
 
+  /* 割り算②③：低いほど良い → 緑→赤グラデ */
+  .bar-fill.danger {
+    background: linear-gradient(90deg, var(--green), var(--gold), var(--red));
+  }
+
   .bar-marker {
     position: absolute;
     top: -3px;
@@ -336,6 +341,64 @@
     letter-spacing: 1px;
   }
 
+  /* ===== Comparison Grid ===== */
+  .cg-wrap {
+    margin-top: 28px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    animation: fadeUp 0.4s 0.4s ease both;
+  }
+
+  .cg-header, .cg-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1.1fr;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .cg-row:last-child { border-bottom: none; }
+
+  .cg-header { background: rgba(201,168,76,0.06); }
+
+  .cg-cell {
+    padding: 10px 8px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.4;
+  }
+
+  .cg-label {
+    text-align: left;
+    align-items: flex-start;
+    font-size: 11px;
+    color: var(--text);
+    padding-left: 12px;
+    border-right: 1px solid rgba(255,255,255,0.05);
+  }
+  .cg-label span {
+    font-size: 9px;
+    color: var(--muted);
+    font-weight: 400;
+    margin-top: 2px;
+  }
+
+  .cg-head { font-size: 10px; color: var(--muted); font-weight: 400; }
+
+  .cg-salary { color: var(--red); }
+  .cg-petit  { color: var(--gold); }
+  .cg-fire   { color: var(--green); }
+  .cg-you    {
+    color: #fff;
+    background: rgba(255,255,255,0.04);
+    border-left: 1px solid rgba(255,255,255,0.07);
+    font-size: 13px;
+  }
+
   /* Animate in */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(16px); }
@@ -396,15 +459,10 @@
       <div class="result-body">
         <div class="result-value empty" id="r1">－</div>
         <div class="benchmark">
-          <div class="benchmark-labels"><span>0倍</span><span>5倍</span><span>10倍+</span></div>
+          <div class="benchmark-labels"><span>0倍（要改善）</span><span>5倍</span><span>10倍+（◎FIRE）</span></div>
           <div class="bar-track">
             <div class="bar-fill" id="bar1" style="width:0%"></div>
             <div class="bar-marker" id="m1" style="left:0%;display:none"></div>
-          </div>
-          <div class="comparison-row">
-            <div class="cmp-item"><div class="cmp-label">高収入サラリーマン</div><div class="cmp-value salary">0.8倍</div></div>
-            <div class="cmp-item"><div class="cmp-label">リベ的小金持ち</div><div class="cmp-value petit">7.1倍</div></div>
-            <div class="cmp-item"><div class="cmp-label">リベ的FIRE民</div><div class="cmp-value fire">26.5倍</div></div>
           </div>
           <div id="j1"></div>
         </div>
@@ -423,15 +481,10 @@
       <div class="result-body">
         <div class="result-value empty" id="r2">－</div>
         <div class="benchmark">
-          <div class="benchmark-labels"><span>0%</span><span>20%</span><span>40%+</span></div>
+          <div class="benchmark-labels"><span>⚠️ 高い（危険）</span><span></span><span>低い（◎安全）</span></div>
           <div class="bar-track">
-            <div class="bar-fill" id="bar2" style="width:0%"></div>
+            <div class="bar-fill" id="bar2" style="width:100%"></div>
             <div class="bar-marker" id="m2" style="left:0%;display:none"></div>
-          </div>
-          <div class="comparison-row">
-            <div class="cmp-item"><div class="cmp-label">高収入サラリーマン</div><div class="cmp-value salary">30%</div></div>
-            <div class="cmp-item"><div class="cmp-label">リベ的小金持ち</div><div class="cmp-value petit">20%</div></div>
-            <div class="cmp-item"><div class="cmp-label">リベ的FIRE民</div><div class="cmp-value fire">16%</div></div>
           </div>
           <div id="j2"></div>
         </div>
@@ -450,15 +503,10 @@
       <div class="result-body">
         <div class="result-value empty" id="r3">－</div>
         <div class="benchmark">
-          <div class="benchmark-labels"><span>0%</span><span>20%</span><span>40%+</span></div>
+          <div class="benchmark-labels"><span>⚠️ 高い（危険）</span><span></span><span>低い（◎安全）</span></div>
           <div class="bar-track">
-            <div class="bar-fill" id="bar3" style="width:0%"></div>
+            <div class="bar-fill" id="bar3" style="width:100%"></div>
             <div class="bar-marker" id="m3" style="left:0%;display:none"></div>
-          </div>
-          <div class="comparison-row">
-            <div class="cmp-item"><div class="cmp-label">高収入サラリーマン</div><div class="cmp-value salary">37.5%</div></div>
-            <div class="cmp-item"><div class="cmp-label">リベ的小金持ち</div><div class="cmp-value petit">2.8%</div></div>
-            <div class="cmp-item"><div class="cmp-label">リベ的FIRE民</div><div class="cmp-value fire">0.6%</div></div>
           </div>
           <div id="j3"></div>
         </div>
@@ -466,7 +514,39 @@
     </div>
   </div>
 
-  <footer>MONEY LITERACY CALCULATOR · © LIBECITY INSPIRED</footer>
+  <!-- Comparison Grid -->
+  <div class="cg-wrap">
+    <div class="cg-header">
+      <div class="cg-cell cg-label"></div>
+      <div class="cg-cell cg-head cg-salary">高収入<br>サラリーマン</div>
+      <div class="cg-cell cg-head cg-petit">小金持ち</div>
+      <div class="cg-cell cg-head cg-fire">FIRE民</div>
+      <div class="cg-cell cg-head cg-you">あなた</div>
+    </div>
+    <div class="cg-row">
+      <div class="cg-cell cg-label">① 資産÷年収<span>高いほど◎</span></div>
+      <div class="cg-cell cg-salary">0.8倍</div>
+      <div class="cg-cell cg-petit">7.1倍</div>
+      <div class="cg-cell cg-fire">26.5倍</div>
+      <div class="cg-cell cg-you" id="t1">－</div>
+    </div>
+    <div class="cg-row">
+      <div class="cg-cell cg-label">② 税等÷年収<span>低いほど◎</span></div>
+      <div class="cg-cell cg-salary">30%</div>
+      <div class="cg-cell cg-petit">20%</div>
+      <div class="cg-cell cg-fire">16%</div>
+      <div class="cg-cell cg-you" id="t2">－</div>
+    </div>
+    <div class="cg-row">
+      <div class="cg-cell cg-label">③ 税等÷資産<span>低いほど◎</span></div>
+      <div class="cg-cell cg-salary">37.5%</div>
+      <div class="cg-cell cg-petit">2.8%</div>
+      <div class="cg-cell cg-fire">0.6%</div>
+      <div class="cg-cell cg-you" id="t3">－</div>
+    </div>
+  </div>
+
+
 </div>
 
 <script>
@@ -475,17 +555,16 @@ function calc() {
   const income = parseFloat(document.getElementById('income').value) || 0;
   const tax    = parseFloat(document.getElementById('tax').value)    || 0;
 
-  // --- Ratio 1: assets / income ---
+  // --- Ratio 1: assets / income（高いほど◎ → 右=緑） ---
   if (income > 0) {
     const r1 = assets / income;
     document.getElementById('r1').textContent = r1.toFixed(2) + '倍';
     document.getElementById('r1').className = 'result-value';
-    // Bar: 0~30倍でスケール
-    const pct1 = Math.min(r1 / 30 * 100, 100);
+    // Bar: 0~10倍でスケール（10倍=FIRE圏=MAX）
+    const pct1 = Math.min(r1 / 10 * 100, 100);
     document.getElementById('bar1').style.width = pct1 + '%';
     document.getElementById('m1').style.left = pct1 + '%';
     document.getElementById('m1').style.display = 'block';
-    // Judge
     let j1 = '';
     if (r1 >= 10)      j1 = '<div class="judge great">🔥 FIRE圏内！すばらしい</div>';
     else if (r1 >= 3)  j1 = '<div class="judge ok">👍 小金持ち水準。いい感じ！</div>';
@@ -496,14 +575,14 @@ function calc() {
     reset('r1','bar1','m1','j1');
   }
 
-  // --- Ratio 2: tax / income ---
+  // --- Ratio 2: tax / income（低いほど◎ → 右=緑、マーカーを反転） ---
   if (income > 0) {
     const r2 = tax / income * 100;
     document.getElementById('r2').textContent = r2.toFixed(1) + '%';
     document.getElementById('r2').className = 'result-value';
-    // Bar: 0~50%スケール（低い方が良いので逆色）
-    const pct2 = Math.min(r2 / 50 * 100, 100);
-    document.getElementById('bar2').style.width = pct2 + '%';
+    // 低いほど右（緑）に来るよう位置を反転。50%以上は左端（赤）固定
+    const pct2 = Math.max(100 - r2 / 50 * 100, 0);
+    document.getElementById('bar2').style.width = '100%'; // バー全幅でグラデ表示
     document.getElementById('m2').style.left = pct2 + '%';
     document.getElementById('m2').style.display = 'block';
     let j2 = '';
@@ -516,13 +595,13 @@ function calc() {
     reset('r2','bar2','m2','j2');
   }
 
-  // --- Ratio 3: tax / assets ---
+  // --- Ratio 3: tax / assets（低いほど◎ → 右=緑、マーカーを反転） ---
   if (assets > 0) {
     const r3 = tax / assets * 100;
     document.getElementById('r3').textContent = r3.toFixed(1) + '%';
     document.getElementById('r3').className = 'result-value';
-    const pct3 = Math.min(r3 / 50 * 100, 100);
-    document.getElementById('bar3').style.width = pct3 + '%';
+    const pct3 = Math.max(100 - r3 / 50 * 100, 0);
+    document.getElementById('bar3').style.width = '100%';
     document.getElementById('m3').style.left = pct3 + '%';
     document.getElementById('m3').style.display = 'block';
     let j3 = '';
@@ -534,6 +613,22 @@ function calc() {
   } else {
     reset('r3','bar3','m3','j3');
   }
+  // Update comparison table "あなた" column
+  const t1el = document.getElementById('t1');
+  const t2el = document.getElementById('t2');
+  const t3el = document.getElementById('t3');
+
+  if (income > 0 && assets >= 0) {
+    t1el.textContent = (assets / income).toFixed(2) + '倍';
+  } else { t1el.textContent = '－'; }
+
+  if (income > 0 && tax >= 0) {
+    t2el.textContent = (tax / income * 100).toFixed(1) + '%';
+  } else { t2el.textContent = '－'; }
+
+  if (assets > 0 && tax >= 0) {
+    t3el.textContent = (tax / assets * 100).toFixed(1) + '%';
+  } else { t3el.textContent = '－'; }
 }
 
 function reset(rId, bId, mId, jId) {
