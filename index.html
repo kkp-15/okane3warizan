@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>お金持ちの3つの割り算</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --dark: #0e0e0e;
+    --darker: #080808;
+    --card: #181818;
+    --card2: #1e1e1e;
+    --text: #f0ece0;
+    --muted: #7a7570;
+    --green: #4caf7d;
+    --red: #cf6679;
+    --border: rgba(201,168,76,0.2);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--darker);
+    color: var(--text);
+    font-family: 'Noto Sans JP', sans-serif;
+    min-height: 100vh;
+    padding: 24px 16px 60px;
+  }
+
+  /* Background pattern */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(201,168,76,0.03) 60px, rgba(201,168,76,0.03) 61px),
+      repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(201,168,76,0.03) 60px, rgba(201,168,76,0.03) 61px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 32px;
+    padding-top: 8px;
+  }
+
+  .tag {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    padding: 4px 12px;
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-size: clamp(20px, 5vw, 26px);
+    font-weight: 900;
+    line-height: 1.3;
+    color: var(--text);
+  }
+
+  h1 span {
+    color: var(--gold);
+  }
+
+  .subtitle {
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  /* Input section */
+  .inputs-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+
+  .inputs-title {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    font-family: 'Space Mono', monospace;
+    margin-bottom: 20px;
+  }
+
+  .input-group {
+    margin-bottom: 18px;
+  }
+
+  .input-group:last-child { margin-bottom: 0; }
+
+  label {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+  }
+
+  label strong {
+    color: var(--text);
+    font-weight: 700;
+  }
+
+  .input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 2px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .input-wrap:focus-within {
+    border-color: var(--gold);
+  }
+
+  input[type="number"] {
+    flex: 1;
+    background: var(--card2);
+    border: none;
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 16px;
+    padding: 12px 14px;
+    outline: none;
+    width: 100%;
+    -moz-appearance: textfield;
+  }
+
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+  .unit {
+    background: rgba(201,168,76,0.08);
+    color: var(--gold);
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    padding: 12px 12px;
+    white-space: nowrap;
+    border-left: 1px solid rgba(201,168,76,0.2);
+  }
+
+  /* Results */
+  .results {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .result-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+
+  .result-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(201,168,76,0.4);
+  }
+
+  .result-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    background: rgba(201,168,76,0.06);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .result-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.3);
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .result-formula {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 700;
+  }
+
+  .result-desc {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .result-body {
+    padding: 16px 20px 20px;
+  }
+
+  .result-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--gold-light);
+    line-height: 1;
+    margin-bottom: 12px;
+    transition: all 0.3s;
+  }
+
+  .result-value.empty {
+    color: var(--muted);
+    font-size: 24px;
+  }
+
+  /* Benchmark bar */
+  .benchmark {
+    margin-top: 12px;
+  }
+
+  .benchmark-labels {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+  }
+
+  .bar-track {
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 3px;
+    overflow: visible;
+    position: relative;
+    margin-bottom: 8px;
+  }
+
+  .bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--red), var(--gold), var(--green));
+    border-radius: 3px;
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+    max-width: 100%;
+  }
+
+  .bar-marker {
+    position: absolute;
+    top: -3px;
+    width: 12px;
+    height: 12px;
+    background: #fff;
+    border-radius: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 0 2px var(--gold);
+    transition: left 0.5s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .comparison-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 4px;
+    margin-top: 8px;
+  }
+
+  .cmp-item {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 2px;
+    padding: 6px 8px;
+    text-align: center;
+  }
+
+  .cmp-label {
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .cmp-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .cmp-value.salary { color: var(--red); }
+  .cmp-value.petit  { color: var(--gold); }
+  .cmp-value.fire   { color: var(--green); }
+
+  .judge {
+    font-size: 12px;
+    font-weight: 700;
+    margin-top: 10px;
+    padding: 6px 10px;
+    border-radius: 2px;
+    display: inline-block;
+  }
+
+  .judge.great { background: rgba(76,175,125,0.12); color: var(--green); }
+  .judge.ok    { background: rgba(201,168,76,0.12); color: var(--gold); }
+  .judge.low   { background: rgba(207,102,121,0.12); color: var(--red); }
+
+  footer {
+    text-align: center;
+    margin-top: 32px;
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 1px;
+  }
+
+  /* Animate in */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .inputs-card  { animation: fadeUp 0.4s ease both; }
+  .result-card:nth-child(1) { animation: fadeUp 0.4s 0.1s ease both; }
+  .result-card:nth-child(2) { animation: fadeUp 0.4s 0.2s ease both; }
+  .result-card:nth-child(3) { animation: fadeUp 0.4s 0.3s ease both; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="tag">Money Literacy</div>
+    <h1>お金持ちの<span>3つの割り算</span></h1>
+    <p class="subtitle">数字を入力するだけで、あなたの財務状態を診断</p>
+  </header>
+
+  <div class="inputs-card">
+    <div class="inputs-title">▼ YOUR NUMBERS</div>
+
+    <div class="input-group">
+      <label><strong>① 資産総額</strong>（預貯金・投資・不動産等の合計）</label>
+      <div class="input-wrap">
+        <input type="number" id="assets" placeholder="0" min="0" oninput="calc()">
+        <span class="unit">万円</span>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label><strong>② 年収</strong>（給与・副業・配当等の合計）</label>
+      <div class="input-wrap">
+        <input type="number" id="income" placeholder="0" min="0" oninput="calc()">
+        <span class="unit">万円</span>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label><strong>③ 年間 税金＋社会保険料</strong>（源泉徴収票などで確認）</label>
+      <div class="input-wrap">
+        <input type="number" id="tax" placeholder="0" min="0" oninput="calc()">
+        <span class="unit">万円</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="results">
+    <!-- Result 1 -->
+    <div class="result-card">
+      <div class="result-header">
+        <div class="result-num">1</div>
+        <div>
+          <div class="result-formula">資産 ÷ 年収</div>
+          <div class="result-desc">年収の何倍の資産があるか？　→　高いほど◎</div>
+        </div>
+      </div>
+      <div class="result-body">
+        <div class="result-value empty" id="r1">－</div>
+        <div class="benchmark">
+          <div class="benchmark-labels"><span>0倍</span><span>5倍</span><span>10倍+</span></div>
+          <div class="bar-track">
+            <div class="bar-fill" id="bar1" style="width:0%"></div>
+            <div class="bar-marker" id="m1" style="left:0%;display:none"></div>
+          </div>
+          <div class="comparison-row">
+            <div class="cmp-item"><div class="cmp-label">高収入サラリーマン</div><div class="cmp-value salary">0.8倍</div></div>
+            <div class="cmp-item"><div class="cmp-label">リベ的小金持ち</div><div class="cmp-value petit">7.1倍</div></div>
+            <div class="cmp-item"><div class="cmp-label">リベ的FIRE民</div><div class="cmp-value fire">26.5倍</div></div>
+          </div>
+          <div id="j1"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Result 2 -->
+    <div class="result-card">
+      <div class="result-header">
+        <div class="result-num">2</div>
+        <div>
+          <div class="result-formula">税等 ÷ 年収</div>
+          <div class="result-desc">年収に対する税負担率は？　→　低いほど◎</div>
+        </div>
+      </div>
+      <div class="result-body">
+        <div class="result-value empty" id="r2">－</div>
+        <div class="benchmark">
+          <div class="benchmark-labels"><span>0%</span><span>20%</span><span>40%+</span></div>
+          <div class="bar-track">
+            <div class="bar-fill" id="bar2" style="width:0%"></div>
+            <div class="bar-marker" id="m2" style="left:0%;display:none"></div>
+          </div>
+          <div class="comparison-row">
+            <div class="cmp-item"><div class="cmp-label">高収入サラリーマン</div><div class="cmp-value salary">30%</div></div>
+            <div class="cmp-item"><div class="cmp-label">リベ的小金持ち</div><div class="cmp-value petit">20%</div></div>
+            <div class="cmp-item"><div class="cmp-label">リベ的FIRE民</div><div class="cmp-value fire">16%</div></div>
+          </div>
+          <div id="j2"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Result 3 -->
+    <div class="result-card">
+      <div class="result-header">
+        <div class="result-num">3</div>
+        <div>
+          <div class="result-formula">税等 ÷ 資産</div>
+          <div class="result-desc">資産に対する税負担率は？　→　低いほど◎（FIRE目線）</div>
+        </div>
+      </div>
+      <div class="result-body">
+        <div class="result-value empty" id="r3">－</div>
+        <div class="benchmark">
+          <div class="benchmark-labels"><span>0%</span><span>20%</span><span>40%+</span></div>
+          <div class="bar-track">
+            <div class="bar-fill" id="bar3" style="width:0%"></div>
+            <div class="bar-marker" id="m3" style="left:0%;display:none"></div>
+          </div>
+          <div class="comparison-row">
+            <div class="cmp-item"><div class="cmp-label">高収入サラリーマン</div><div class="cmp-value salary">37.5%</div></div>
+            <div class="cmp-item"><div class="cmp-label">リベ的小金持ち</div><div class="cmp-value petit">2.8%</div></div>
+            <div class="cmp-item"><div class="cmp-label">リベ的FIRE民</div><div class="cmp-value fire">0.6%</div></div>
+          </div>
+          <div id="j3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>MONEY LITERACY CALCULATOR · © LIBECITY INSPIRED</footer>
+</div>
+
+<script>
+function calc() {
+  const assets = parseFloat(document.getElementById('assets').value) || 0;
+  const income = parseFloat(document.getElementById('income').value) || 0;
+  const tax    = parseFloat(document.getElementById('tax').value)    || 0;
+
+  // --- Ratio 1: assets / income ---
+  if (income > 0) {
+    const r1 = assets / income;
+    document.getElementById('r1').textContent = r1.toFixed(2) + '倍';
+    document.getElementById('r1').className = 'result-value';
+    // Bar: 0~30倍でスケール
+    const pct1 = Math.min(r1 / 30 * 100, 100);
+    document.getElementById('bar1').style.width = pct1 + '%';
+    document.getElementById('m1').style.left = pct1 + '%';
+    document.getElementById('m1').style.display = 'block';
+    // Judge
+    let j1 = '';
+    if (r1 >= 10)      j1 = '<div class="judge great">🔥 FIRE圏内！すばらしい</div>';
+    else if (r1 >= 3)  j1 = '<div class="judge ok">👍 小金持ち水準。いい感じ！</div>';
+    else if (r1 >= 1)  j1 = '<div class="judge ok">✅ 世間一般より優秀</div>';
+    else               j1 = '<div class="judge low">📈 資産を育てるフェーズ</div>';
+    document.getElementById('j1').innerHTML = j1;
+  } else {
+    reset('r1','bar1','m1','j1');
+  }
+
+  // --- Ratio 2: tax / income ---
+  if (income > 0) {
+    const r2 = tax / income * 100;
+    document.getElementById('r2').textContent = r2.toFixed(1) + '%';
+    document.getElementById('r2').className = 'result-value';
+    // Bar: 0~50%スケール（低い方が良いので逆色）
+    const pct2 = Math.min(r2 / 50 * 100, 100);
+    document.getElementById('bar2').style.width = pct2 + '%';
+    document.getElementById('m2').style.left = pct2 + '%';
+    document.getElementById('m2').style.display = 'block';
+    let j2 = '';
+    if (r2 <= 16)      j2 = '<div class="judge great">🔥 FIRE民レベル！税対策バッチリ</div>';
+    else if (r2 <= 22) j2 = '<div class="judge ok">👍 小金持ち水準。節税上手</div>';
+    else if (r2 <= 28) j2 = '<div class="judge ok">✅ 平均的。さらなる節税の余地あり</div>';
+    else               j2 = '<div class="judge low">⚠️ ノーガード納税かも。要チェック</div>';
+    document.getElementById('j2').innerHTML = j2;
+  } else {
+    reset('r2','bar2','m2','j2');
+  }
+
+  // --- Ratio 3: tax / assets ---
+  if (assets > 0) {
+    const r3 = tax / assets * 100;
+    document.getElementById('r3').textContent = r3.toFixed(1) + '%';
+    document.getElementById('r3').className = 'result-value';
+    const pct3 = Math.min(r3 / 50 * 100, 100);
+    document.getElementById('bar3').style.width = pct3 + '%';
+    document.getElementById('m3').style.left = pct3 + '%';
+    document.getElementById('m3').style.display = 'block';
+    let j3 = '';
+    if (r3 <= 1)       j3 = '<div class="judge great">🔥 FIRE民レベル！資産効率◎</div>';
+    else if (r3 <= 5)  j3 = '<div class="judge ok">👍 小金持ち水準。良好</div>';
+    else if (r3 <= 20) j3 = '<div class="judge ok">✅ 改善余地あり。含み益を育てよう</div>';
+    else               j3 = '<div class="judge low">⚠️ 資産比で税負担が重い状態</div>';
+    document.getElementById('j3').innerHTML = j3;
+  } else {
+    reset('r3','bar3','m3','j3');
+  }
+}
+
+function reset(rId, bId, mId, jId) {
+  document.getElementById(rId).textContent = '－';
+  document.getElementById(rId).className = 'result-value empty';
+  document.getElementById(bId).style.width = '0%';
+  document.getElementById(mId).style.display = 'none';
+  document.getElementById(jId).innerHTML = '';
+}
+</script>
+</body>
+</html>
